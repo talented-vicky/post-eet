@@ -36,7 +36,7 @@ const TextField: React.FC<TextFieldProps> = ({
                         <label
                             className={`absolute transition-all duration-200 ease-in-out 
                                 ${(field.value || isFocused) && floatAnim
-                                    ? 'bg-backGround -top-1 px-2 text-sm text-gray-700 rounded-lg'
+                                    ? 'bg-white -top-1 px-2 text-sm text-gray-700 rounded-lg'
                                     : 'bg-transparent top-4 left-4 text-grey-text-dark'
                                 }
                                 ${(!floatAnim && (isFocused || field.value)) && 'text-transparent'}
@@ -50,10 +50,10 @@ const TextField: React.FC<TextFieldProps> = ({
                             {...field}
                             onFocus={() => setIsFocused(true)}
                             onBlur={() => setIsFocused(false)}
-                            className={`bg-backGround p-2 border rounded-xl focus:outline-none border-grey-text-dark
+                            className={`bg-backGround p-2 border rounded-3xl focus:outline-none border-grey-text-dark
                                 ${fieldState.error ? 'border-red-500' : ''} 
-                                ${field.value && !fieldState.error ? 'border-t-secondary border-r-primary border-l-secondary border-b-primary' : ''}
-                                ${isFocused && 'border-t-secondary border-r-primary border-l-secondary border-b-primary'} 
+                                ${field.value && !fieldState.error ? 'border-t-main-complement border-r-main-one border-l-main-compborder-t-main-complement border-b-main-one' : ''}
+                                ${isFocused && 'border-t-main-complement border-r-main-one border-l-main-complement border-b-main-one'} 
                             `}
                         />
                         {
@@ -70,8 +70,8 @@ const TextField: React.FC<TextFieldProps> = ({
                         {
                             fieldState.error &&
                             <div className='flex mt-2 space-x-1'>
-                                <img className='bg-red-backGround p-1 rounded-lg' src={errLogo} alt='errLogo'></img>
-                                <span className='text-red-600 text-sm'> {fieldState.error?.message}
+                                <img className='h-fit bg-red-backGround p-1 rounded-lg' src={errLogo} alt='errLogo'></img>
+                                <span className='text-red-600 text-left text-sm'> {fieldState.error?.message}
                                 </span>
                             </div>
                         }
