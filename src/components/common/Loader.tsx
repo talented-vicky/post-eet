@@ -4,7 +4,7 @@ import { MoonLoader, DotLoader, BeatLoader, BounceLoader } from 'react-spinners'
 
 // form submission
 const BeatLoaderr = () => {
-    return <BeatLoader color='#ffff' loading={true} size={10} />
+    return <BeatLoader color='#ffff' loading={true} size={8} />
 }
 const MoonLoaderr = () => {
     return <MoonLoader color='#ffff' loading={true} size={20} />

@@ -1,5 +1,6 @@
 export interface ButtonProps {
     label: string;
+    loadingLabel: string;
     type: 'submit' | 'reset' | 'button';
     disabled: boolean;
     loading: boolean;

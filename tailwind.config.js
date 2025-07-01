@@ -12,6 +12,11 @@ export default {
         'primary-dark': '#6b7280',
         'primary-black': '#4b5563',
 
+        'main-one': '#59A404',
+        'main-complement': '#2654DC',
+
+        'red-stroke': '#FF0000',
+        'tertiary-stroke': '#FFBF00',
       },
       backgroundImage: {
         'blue-gradient': "linear-gradient(to bottom right, #2654DC 0%, #1135A0 31%, #0F2C80 55%, #112E86 75%, #2654DC 100%)",
