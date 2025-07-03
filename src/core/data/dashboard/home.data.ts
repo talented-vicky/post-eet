@@ -1,4 +1,4 @@
-import homeImg from '../../../assets/icons/nav/home.svg';
+import homeImg from '../../../assets/icons/nav/dashboard.svg';
 import activityImg from '../../../assets/icons/nav/activity.svg';
 import reportImg from '../../../assets/icons/nav/report.png';
 import profileImg from '../../../assets/icons/nav/profile.svg';
