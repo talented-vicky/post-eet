@@ -1,4 +1,4 @@
-import partnersData from "../../../core/data/partnersData";
+import partnersData from "../../../core/data/partners.data";
 import ButtonStatic from "../../../components/common/ButtonStatic";
 
 import mainImg from '../../../assets/images/bg/main.webp';
