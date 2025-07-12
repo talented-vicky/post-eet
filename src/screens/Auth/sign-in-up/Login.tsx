@@ -17,13 +17,12 @@ import { useAuthStore } from '../../../core/store/auth.store';
 
 
 function Login() {
-    const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
-    const { control, handleSubmit } = useForm();
-
-
     const { showNotif } = useNotifStore();
     const { setToken } = useAuthStore();
     const navigate = useNavigate();
+
+    const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
+    const { control, handleSubmit } = useForm();
 
 
     const loginUser = async (formData: any) => {
@@ -36,13 +35,12 @@ function Login() {
         try {
             const res = await authApi.login(body);
             if (res.status === true) {
-                const token = res.data.token;
+                const token = res.data;
                 setToken(token);
-                localStorage.setItem('loginToken', token);
-                navigate('/dashboard')
+                showNotif('Success', `${res.message}`, 'success')
+                navigate('/dashboard');
             }
         } catch (err: any) {
-            console.log(err)
             showNotif(`${err.response?.statusText}`, `${err.response?.data}`, 'error')
         } finally {
             setIsSubmitting(false)

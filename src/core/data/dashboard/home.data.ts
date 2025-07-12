@@ -1,7 +1,7 @@
 import homeImg from '../../../assets/icons/nav/dashboard.svg';
 import activityImg from '../../../assets/icons/nav/activity.svg';
-import reportImg from '../../../assets/icons/nav/report.png';
-import profileImg from '../../../assets/icons/nav/profile.svg';
+import reportImg from '../../../assets/icons/nav/report.svg';
+import postsImg from '../../../assets/icons/nav/content.svg';
 
 const navHomeData = [
     {
@@ -16,7 +16,7 @@ const navHomeData = [
     },
     {
         text: 'Posts',
-        icon: profileImg,
+        icon: postsImg,
         count: '',
     },
     {
