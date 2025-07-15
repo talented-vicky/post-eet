@@ -23,7 +23,7 @@ export default {
         'gray-light': '#f5f5f4',
 
         'red-stroke': '#FF0000',
-        'tertiary-stroke': '#FFBF00',
+        'tertiary-stroke': '#CC9900',
       },
       backgroundImage: {
         // 'teal-gradient': "linear-gradient(to bottom right, #33cccc 0%, #008080 33%, #008080 67%, #33cccc 100%)",

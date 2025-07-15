@@ -7,7 +7,7 @@ const BeatLoaderr = () => {
     return <BeatLoader color='#ffff' loading={true} size={8} />
 }
 const MoonLoaderr = () => {
-    return <MoonLoader color='#ffff' loading={true} size={20} />
+    return <MoonLoader color='#7c7c7c' loading={true} size={50} />
 }
 
 // data fetch

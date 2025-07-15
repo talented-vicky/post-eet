@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 
-import errorImg from '../../assets/icons/error.svg';
+import errorImg from '../../assets/icons/util/error.svg';
 
 import { useNotifStore } from '../../core/store/notif.store';
 
