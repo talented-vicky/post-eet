@@ -1,7 +1,8 @@
 export interface DataBoardProps {
     label: string;
+    desc: string;
     link: string;
-    number: number;
+    value: number;
     textColor: string;
     bgColor: string;
 }

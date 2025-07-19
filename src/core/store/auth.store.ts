@@ -8,9 +8,7 @@ export const useAuthStore = create<AuthStoreProps>()(
         set => ({
             token: null,
             setToken: (token) => set({token}),
-            logout: () => {
-                set({token: null})
-            }
+            logout: () => set({token: null})
         }),
         {
             name: 'auth-store',

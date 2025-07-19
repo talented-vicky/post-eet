@@ -23,6 +23,7 @@ export default {
         'gray-light': '#f5f5f4',
 
         'red-stroke': '#FF0000',
+        'red-backGround': '#FFCCCC',
         'tertiary-stroke': '#CC9900',
       },
       backgroundImage: {

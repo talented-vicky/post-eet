@@ -1,19 +1,46 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import navHomeData from "../../core/data/dashboard/home.data";
 import navOptionsData from "../../core/data/dashboard/options.data";
 import { useAuthStore } from "../../core/store/auth.store";
 
 import logo from '../../assets/icons/nav/dashboard.svg';
+import logoutImg from '../../assets/icons/util/logout-user.svg';
+
+import { useNavStore } from "../../core/store/nav.store";
+import { useConfirmationStore } from "../../core/store/confirmation.store";
 
 function Sidebar() {
     const logout = useAuthStore(state => state.logout);
     const navigate = useNavigate();
+    const { activeNav, setActiveNav } = useNavStore();
+    const { hideConfirmation, showConfirmation } = useConfirmationStore();
+
     const navoptionsData = navOptionsData;
     const navhomeData = navHomeData;
 
     const handleLogout = () => {
-        logout();
-        navigate('/login')
+        showConfirmation(
+            logoutImg, 'bg-red-backGround', 'Logout', 'text-red-stroke',
+            'Are you sure you want to logout?',
+            [
+                {
+                    label: 'Yes',
+                    labelColor: 'text-white',
+                    bgColor: 'bg-red-stroke',
+                    onclick: () => {
+                        hideConfirmation();
+                        logout();
+                        navigate('/login');
+                    }
+                },
+                {
+                    label: 'Not yet',
+                    labelColor: 'text-red-stroke',
+                    bgColor: 'bg-red-backGround',
+                    onclick: () => hideConfirmation()
+                },
+            ]
+        )
     }
 
     return (
@@ -30,17 +57,19 @@ function Sidebar() {
                             <span className="mb-3 ml-4">Home</span>
                             <div className="w-full flex flex-col gap-1">
                                 {navhomeData.map((nav, ind) => (
-                                    <div
+                                    <Link
                                         key={ind}
+                                        to={`/${nav.text}`}
+                                        onClick={() => setActiveNav(nav.text)}
                                         className="flex justify-between items-center mr-3"
                                     >
                                         <div className="flex items-center gap-3">
-                                            <div className="w-1.5 h-6 bg-teal-dark rounded-tr-lg rounded-br-lg"></div>
+                                            <div className={`w-1.5 h-6 ${activeNav === nav.text && "bg-teal-dark"} rounded-tr-lg rounded-br-lg`}></div>
                                             <img src={nav.icon} alt="icon" className="w-4"></img>
-                                            <span>{nav.text}</span>
+                                            <span className="capitalize">{nav.text}</span>
                                         </div>
                                         {nav.count && <span className="h-fit flex items-center bg-teal-dark text-xs text-gray-light px-2 py-1 rounded-md">{nav.count}</span>}
-                                    </div>
+                                    </Link>
                                 ))}
                             </div>
                         </div>

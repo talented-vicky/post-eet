@@ -1,17 +1,23 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-
 import './App.css'
+
+
 import Login from './screens/Auth/sign-in-up/Login';
-import NotifDialog from './components/dialogs/Notif';
 import Home from './screens/main/home/Home';
 import SignUp from './screens/Auth/sign-in-up/SignUp';
 import Dashboard from './screens/main/home/Dashboard';
 import Posts from './screens/main/posts/Posts';
 
+import NotifDialog from './components/dialogs/NotifDialog';
+import AddPostDialog from './components/dialogs/AddPostDialog';
+import ConfirmationDialog from './components/dialogs/ConfirmationDialog';
+
 
 function App() {
   return (
     <Router>
+      <ConfirmationDialog />
+      <AddPostDialog />
       <NotifDialog />
       <Routes>
         {/* public routes */}
