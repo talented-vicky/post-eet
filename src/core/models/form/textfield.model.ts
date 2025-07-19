@@ -7,6 +7,7 @@ export interface TextFieldProps {
     floatAnim?: boolean;
     type?: 'text' | 'email' | 'password'
     placeholder?: string;
+    height?: string;
     className?: string;
     control: Control<any>;
     error?: FieldError;

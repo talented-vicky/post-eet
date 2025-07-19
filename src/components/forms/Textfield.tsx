@@ -13,6 +13,7 @@ const TextField: React.FC<TextFieldProps> = ({
     control,
     placeholder,
     rules,
+    height,
     className,
     floatAnim = true,
 }) => {
@@ -22,6 +23,8 @@ const TextField: React.FC<TextFieldProps> = ({
     const togglePasswordVisibility = () => {
         setIsPasswordVisible((val) => !val);
     }
+
+    const heightClass = height ? `h-[${height}px]` : '';
 
     const inputType = type === 'password' && isPasswordVisible ? 'text' : type;
 
@@ -34,7 +37,7 @@ const TextField: React.FC<TextFieldProps> = ({
                 render={({ field, fieldState }) => (
                     <div className='flex flex-col'>
                         <label
-                            className={`absolute transition-all duration-200 ease-in-out 
+                            className={`absolute transition-all duration-200 ease-in-out
                                 ${(field.value || isFocused) && floatAnim
                                     ? 'bg-white -top-1 px-2 text-sm text-gray-700 rounded-lg'
                                     : 'bg-transparent top-4 left-4 text-grey-text-dark'
@@ -50,7 +53,7 @@ const TextField: React.FC<TextFieldProps> = ({
                             {...field}
                             onFocus={() => setIsFocused(true)}
                             onBlur={() => setIsFocused(false)}
-                            className={`bg-backGround p-2 border rounded-3xl focus:outline-none border-grey-text-dark
+                            className={`bg-backGround p-2 border rounded-3xl focus:outline-none border-grey-text-dark ${heightClass && 'h-16'}
                                 ${fieldState.error ? 'border-red-500' : ''} 
                                 ${field.value && !fieldState.error ? 'border-t-main-complement border-r-main-one border-l-main-compborder-t-main-complement border-b-main-one' : ''}
                                 ${isFocused && 'border-t-main-complement border-r-main-one border-l-main-complement border-b-main-one'} 

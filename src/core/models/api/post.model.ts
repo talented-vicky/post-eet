@@ -13,3 +13,13 @@ export interface PostLikeData {
     postId: number,
     postLike: number,
 }
+
+export interface PostCreateData {
+    title: string;
+    content: string;
+}
+
+export interface MediaUploadData {
+    url: string;
+    id: string;   
+}

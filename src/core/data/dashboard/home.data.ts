@@ -5,22 +5,22 @@ import postsImg from '../../../assets/icons/nav/content.svg';
 
 const navHomeData = [
     {
-        text: 'Dashboard',
+        text: 'dashboard',
         icon: homeImg,
         count: '',
     },
     {
-        text: 'Activites',
+        text: 'activites',
         icon: activityImg,
         count: '3',
     },
     {
-        text: 'Posts',
+        text: 'posts',
         icon: postsImg,
         count: '',
     },
     {
-        text: 'Report',
+        text: 'report',
         icon: reportImg,
         count: '',
     },

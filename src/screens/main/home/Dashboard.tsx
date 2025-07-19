@@ -17,49 +17,85 @@ import DataBoard from "../../../components/common/DataBoard";
 import { Title } from "../../../components/common/Title";
 
 import { useAuthStore } from "../../../core/store/auth.store";
-import { boardData } from "../../../core/data/dashboard/board.data";
 import { analyticsData } from "../../../core/data/dashboard/analytics.data";
 import { postData } from "../../../core/data/dashboard/post.data";
 import { useNotifStore } from "../../../core/store/notif.store";
+import { usePostStore } from "../../../core/store/post.store";
 
 
 
 function Dashboard() {
     const navigate = useNavigate();
     const { showNotif } = useNotifStore();
+    const { showPost } = usePostStore();
     const token = useAuthStore(state => state.token);
+
     const { MoonLoaderr } = loaderSpinner;
+
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [userDashboard, setUserDashboard] = useState<UserDashboard>()
 
-    const allBoardData = boardData;
     const userAnalyticsData = analyticsData;
     const recentPostData = postData;
 
-    useEffect(() => {
-        const apiCalls = [
-            getUserDashboard()
-        ]
-        Promise.all(apiCalls).finally(() => setIsLoading(false))
-    }, [])
 
     useEffect(() => {
-        if (!token) {
-            showNotif("Unauthorized", "Not Logged in OR Session Expired", "error")
-            navigate('/login')
+        const fetchInitData = async () => {
+            if (!token) {
+                showNotif("Unauthorized", "Not Logged in OR Session Expired", "error")
+                navigate('/login')
+                return;
+            }
+
+            setIsLoading(true);
+            try {
+                const [dashboardResponse] = await Promise.all([
+                    userApi.getUserDashboard()
+                ])
+                if (dashboardResponse.status) setUserDashboard(dashboardResponse.data);
+
+            } catch (error: any) {
+                showNotif(`${error?.response?.statusText}`, `${error?.response?.data?.message}`, "error");
+                navigate("/login");
+            } finally {
+                setIsLoading(false);
+            }
         }
+
+        fetchInitData();
     }, [token])
 
-    const getUserDashboard = async () => {
-        setIsLoading(true);
-        const res = await userApi.getUserDashboard();
-        if (res.status) {
-            console.log('user dashboard -> ', res.data)
-            setUserDashboard(res.data);
-        }
-    }
-
+    const boardData = [
+        {
+            label: 'Total Posts',
+            number: userDashboard?.postCount ?? 0,
+            bgColor: 'darkBg',
+            textColor: 'darkText',
+            desc: 'All my public posts',
+        },
+        {
+            label: 'Reveiewed Comments',
+            number: 10,
+            bgColor: 'lightBg',
+            textColor: 'lightText',
+            desc: 'All comments have been reviewed',
+        },
+        {
+            label: 'Private Posts',
+            number: 12,
+            bgColor: 'lightBg',
+            textColor: 'lightText',
+            desc: 'Tap to see list',
+        },
+        {
+            label: 'Unreplied Comments',
+            number: 6,
+            bgColor: 'lightBg',
+            textColor: 'lightText',
+            desc: 'See all comments left unread',
+        },
+    ]
 
     return (
         <div className="flex gap-2 text-gray-main bg-white border border-gray-100 shadow-xl rounded-xl p-3">
@@ -106,17 +142,23 @@ function Dashboard() {
                                 <span className="text-sm">Check all recent and incoming activities here</span>
                             </div>
                             <div className="h-fit flex gap-3">
-                                <ButtonStatic label="Add Post" textColor="darkText" bgColor="darkBg" link="/dashboard" />
+                                <button
+                                    className={`py-2 px-5 rounded-3xl border-2`}
+                                    onClick={showPost}
+                                >
+                                    Add Post
+                                </button>
+                                {/* <ButtonStatic label="Add Post" textColor="darkText" bgColor="darkBg" link="/dashboard" /> */}
                                 <ButtonStatic label="Read Comments" textColor="lightText" bgColor="lightBg" link="/dashboard" />
                             </div>
                         </div>
                         <div className="flex flex-col gap-5">
                             <div className="flex gap-5">
-                                {allBoardData.map((board, ind) => (
+                                {boardData.map((board, ind) => (
                                     <DataBoard
-                                        key={ind} link="/dashboard"
+                                        key={ind} link="/dashboard" desc={board.desc}
                                         textColor={board.textColor} bgColor={board.bgColor}
-                                        label={board.label} number={board.number} />
+                                        label={board.label} value={board.number} />
                                 ))}
                             </div>
                             <div className="flex">

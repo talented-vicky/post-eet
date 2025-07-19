@@ -32,12 +32,13 @@ function Posts() {
     const handlePostLike = async (postId: number) => {
         try {
             const res = await postApi.likePost(postId);
-            if (res.data) {
+            if (res.status) {
                 fetchPosts();
                 showNotif("Success", `${res.message}`, "notif");
             }
         } catch (error: any) {
-            showNotif(`${error?.response?.statusText}`, `${error.message}`, "error");
+            console.log('error -> ', error)
+            showNotif(`${error?.code}`, `${error?.response?.data?.message}`, "error");
         }
     }
 
@@ -49,7 +50,7 @@ function Posts() {
                 setPostData(res.data);
             }
         } catch (error) {
-            showNotif("Error", "Unable to Load Posts", "error");
+            showNotif("Error", "Error Loading Posts", "error");
         } finally {
             setIsLoading(false)
         }
@@ -66,8 +67,11 @@ function Posts() {
                 <div className="w-4/5 flex flex-col">
                     <Title text="All Posts" />
                     <div className="p-3 bg-gray-light">
-                        {postData.map(post => (
-                            <div className="flex flex-col bg-white rounded-lg mb-3 p-3">
+                        {postData.map((post, ind) => (
+                            <div
+                                key={ind}
+                                className="flex flex-col bg-white rounded-lg mb-3 p-3"
+                            >
                                 <div className="flex gap-2 justify-end items-center">
                                     <span>Like</span>
                                     <img src={heartImg} alt="view" onClick={() => handlePostLike(post.id)} className="w-4 cursor-pointer"></img>

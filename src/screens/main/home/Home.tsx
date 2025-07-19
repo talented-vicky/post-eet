@@ -3,6 +3,7 @@ import ButtonStatic from "../../../components/common/ButtonStatic";
 
 import mainImg from '../../../assets/images/bg/main.webp';
 
+
 function Home() {
     return (
         <div className="flex"
@@ -15,8 +16,8 @@ function Home() {
                     <div className="w-full flex justify-between items-center z-20">
                         <div className="flex items-center gap-5">
                             <span className="font-semibold text-3xl">POSTeet</span>
-                            {['home', 'solutions', 'pricing', 'resources'].map(nav => (
-                                <span className="text-primary-light">{nav}</span>
+                            {['home', 'solutions', 'pricing', 'resources'].map((nav, ind) => (
+                                <span key={ind} className="text-primary-light">{nav}</span>
                             ))}
                         </div>
                         <div className="flex gap-3">

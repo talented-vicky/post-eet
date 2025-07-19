@@ -10,7 +10,7 @@ const colorClass: Record<string, string> = {
     darkText: 'text-white'
 }
 
-const DataBoard: React.FC<DataBoardProps> = ({ label, number, link, textColor, bgColor }) => {
+const DataBoard: React.FC<DataBoardProps> = ({ label, desc, value, link, textColor, bgColor }) => {
     return (
         <div className={`w-full flex flex-col gap-3 items-start justify-between ${colorClass[textColor]} ${colorClass[bgColor]} rounded-xl p-3`}>
             <div className="w-full flex justify-between items-center">
@@ -19,10 +19,9 @@ const DataBoard: React.FC<DataBoardProps> = ({ label, number, link, textColor, b
                     <img src={arrowImg} alt="arrow" className="w-2"></img>
                 </Link>
             </div>
-            <span className="text-4xl">{number}</span>
-            <div className="flex gap-2">
-                <span>dk</span>
-                <span>View all</span>
+            <span className="text-4xl">{value}</span>
+            <div className="flex">
+                <span>{desc}</span>
             </div>
         </div>
     )
