@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 import bgImg from '../../../assets/images/bg/post-eet.webp';
 import TextField from '../../../components/forms/Textfield';
-import Button from '../../../components/common/Button';
+import { Button } from '../../../components/common/Button';
 
 // import googleImg from '../../../assets/images/auth/google.png';
 // import appleImg from '../../../assets/images/auth/apple-logo.png';
@@ -89,6 +89,7 @@ function SignUp() {
                                 label='Sign Up' type='button'
                                 disabled={isChecked ? false : true}
                                 loading={isSubmitting}
+                                loadingLabel='Signing up'
                                 onclick={handleSubmit(handleSignUp)} />
                         </div>
                     </div>

@@ -1,9 +1,7 @@
-interface TitleProps {
-    text: string;
-}
-
-export const Title: React.FC<TitleProps> = ({ text }) => {
+const Title: React.FC<{ text: string }> = ({ text }) => {
     return (
         <span className="text-left font-bold">{text}</span>
     )
 }
+
+export default Title;

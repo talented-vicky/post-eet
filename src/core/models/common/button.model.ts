@@ -6,3 +6,10 @@ export interface ButtonProps {
     loading: boolean;
     onclick: () => void;
 }
+
+export interface ButtonStaticProps {
+    label: string;
+    link: string;
+    textColor: string;
+    bgColor: string;
+}
