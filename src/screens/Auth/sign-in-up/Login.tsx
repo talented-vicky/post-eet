@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 
 import TextField from '../../../components/forms/Textfield';
-import Button from '../../../components/common/Button';
+import { Button } from '../../../components/common/Button';
 
 import bgImg from '../../../assets/images/bg/post-eet.webp';
 import googleImg from '../../../assets/images/auth/google.png';

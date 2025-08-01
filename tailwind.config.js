@@ -18,6 +18,10 @@ export default {
         'teal-main': '#005757',
         'teal-light': '#33cccc',
         'teal-dark': '#008080',
+        // 'green-primary': '#49A010',
+        // 'green-primary-2': '#489F0F',
+        // 'green-secondary': '#397E0C',
+        // 'green-secondary-2': '#3A7F0D',
 
         'gray-main': '#7c7c7c',
         'gray-light': '#f5f5f4',

@@ -6,7 +6,6 @@ import errorImg from '../../assets/icons/util/error.svg';
 import uploadImg from '../../assets/icons/post/download.svg';
 
 import TextField from '../forms/Textfield';
-import Button from '../common/Button';
 
 import { usePostStore } from '../../core/store/post.store';
 import { useNotifStore } from '../../core/store/notif.store';

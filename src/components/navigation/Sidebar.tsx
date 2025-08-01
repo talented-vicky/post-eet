@@ -3,7 +3,7 @@ import navHomeData from "../../core/data/dashboard/home.data";
 import navOptionsData from "../../core/data/dashboard/options.data";
 import { useAuthStore } from "../../core/store/auth.store";
 
-import logo from '../../assets/icons/nav/dashboard.svg';
+import logo from '../../assets/icons/logo/posteet.svg';
 import logoutImg from '../../assets/icons/util/logout-user.svg';
 
 import { useNavStore } from "../../core/store/nav.store";

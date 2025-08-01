@@ -1,16 +1,11 @@
-import type { ButtonProps } from "../../core/models/common/button.model";
+import { Link } from "react-router-dom";
+
+import type { ButtonProps, ButtonStaticProps } from "../../core/models/common/button.model";
 import loaderSpinner from "./Loader";
 
 const { BeatLoaderr } = loaderSpinner;
 
-const Button: React.FC<ButtonProps> = ({
-    label,
-    loadingLabel,
-    disabled,
-    loading,
-    type,
-    onclick
-}) => {
+export const Button: React.FC<ButtonProps> = ({ label, loadingLabel, disabled, loading, type, onclick }) => {
     return (
         <button
             disabled={disabled}
@@ -31,4 +26,18 @@ const Button: React.FC<ButtonProps> = ({
     )
 }
 
-export default Button;
+
+const colorClass: Record<string, string> = {
+    lightBg: 'bg-white',
+    darkBg: 'bg-primary-dark',
+    lightText: 'text-black',
+    darkText: 'text-white'
+}
+
+export const ButtonStatic: React.FC<ButtonStaticProps> = ({ label, link, textColor, bgColor }) => {
+    return (
+        <button className={`${colorClass[textColor]} ${colorClass[bgColor]} py-2 px-5 rounded-3xl ${bgColor === 'darkBg' && 'border-2'}`}>
+            <Link to={link} > {label} </Link>
+        </button>
+    )
+}

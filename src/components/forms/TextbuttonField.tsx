@@ -1,32 +1,21 @@
 import { useState } from 'react';
 import { Controller } from "react-hook-form";
-import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 
-import type { TextFieldProps } from '../../core/models/form/textfield.model';
 
 import errLogo from '../../assets/images/error.png';
+import type { TextbuttonFieldProps } from '../../core/models/form/textbuttonfield.model';
 
 
-const TextField: React.FC<TextFieldProps> = ({
+const TextbuttonField: React.FC<TextbuttonFieldProps> = ({
     name,
     type = 'text',
     control,
     placeholder,
     rules,
-    height,
-    className,
+    addOn,
     floatAnim = true,
 }) => {
-    const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
     const [isFocused, setIsFocused] = useState<boolean>(false);
-
-    const togglePasswordVisibility = () => {
-        setIsPasswordVisible((val) => !val);
-    }
-
-    const heightClass = height ? `h-[${height}px]` : '';
-
-    const inputType = type === 'password' && isPasswordVisible ? 'text' : type;
 
     return (
         <div className='relative mb-4 py-2 w-full xs:mb-1 xs:py-1'>
@@ -37,7 +26,7 @@ const TextField: React.FC<TextFieldProps> = ({
                 render={({ field, fieldState }) => (
                     <div className='flex flex-col'>
                         <label
-                            className={`absolute pointer-events-none transition-all duration-200 ease-in-out
+                            className={`w-full flex justify-between absolute pointer-events-none transition-all duration-200 ease-in-out
                                 ${(field.value || isFocused) && floatAnim
                                     ? 'bg-white -top-1 px-2 text-sm text-gray-700 rounded-lg'
                                     : 'bg-transparent top-4 left-4 text-grey-text-dark'
@@ -47,29 +36,21 @@ const TextField: React.FC<TextFieldProps> = ({
                         >
                             <span className={`${fieldState.error && 'text-red-500'}`}> {placeholder}</span>
                         </label>
+                        <span className='absolute right-2 top-3'>
+                            {typeof addOn == 'function' ? addOn() : addOn}
+                        </span>
 
                         <input
-                            type={inputType}
+                            type={type}
                             {...field}
                             onFocus={() => setIsFocused(true)}
                             onBlur={() => setIsFocused(false)}
-                            className={`bg-backGround p-2 border rounded-3xl focus:outline-none border-grey-text-dark ${heightClass && 'h-16'}
+                            className={`bg-backGround p-2 border rounded-3xl focus:outline-none border-grey-text-dark'}
                                 ${fieldState.error ? 'border-red-500' : ''} 
                                 ${field.value && !fieldState.error ? 'border-t-main-complement border-r-main-one border-l-main-compborder-t-main-complement border-b-main-one' : ''}
                                 ${isFocused && 'border-t-main-complement border-r-main-one border-l-main-complement border-b-main-one'} 
                             `}
                         />
-                        {
-                            type === 'password' && (
-                                <span className={`absolute right-4 top-5 cursor-pointer ${className}`}
-                                    onClick={() => {
-                                        togglePasswordVisibility();
-                                        setIsFocused(true);
-                                    }}>
-                                    {isPasswordVisible ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
-                                </span>
-                            )
-                        }
                         {
                             fieldState.error &&
                             <div className='flex mt-2 space-x-1'>
@@ -85,4 +66,4 @@ const TextField: React.FC<TextFieldProps> = ({
     )
 }
 
-export default TextField;
+export default TextbuttonField;

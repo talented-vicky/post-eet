@@ -1,33 +1,38 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import userApi from "../../../api/userApi";
-
-import type { UserDashboard } from "../../../core/models/api/user.model";
-
 import searchImg from '../../../assets/icons/util/search.svg';
 import emailImg from '../../../assets/icons/nav/email.svg';
 import notifImg from '../../../assets/icons/util/notification.svg';
 import userImg from '../../../assets/icons/util/user.svg';
 
+import { ButtonStatic } from "../../../components/common/Button";
+import ReadMore from "../../../components/common/ReadMore";
+import Title from "../../../components/common/Title";
 import loaderSpinner from "../../../components/common/Loader";
-import Sidebar from "../../../components/navigation/Sidebar";
-import ButtonStatic from "../../../components/common/ButtonStatic";
 import DataBoard from "../../../components/common/DataBoard";
-import { Title } from "../../../components/common/Title";
+import Sidebar from "../../../components/navigation/Sidebar";
+
+import type { UserDashboard } from "../../../core/models/api/user.model";
 
 import { useAuthStore } from "../../../core/store/auth.store";
-import { analyticsData } from "../../../core/data/dashboard/analytics.data";
-import { postData } from "../../../core/data/dashboard/post.data";
 import { useNotifStore } from "../../../core/store/notif.store";
 import { usePostStore } from "../../../core/store/post.store";
 
+import { analyticsData } from "../../../core/data/dashboard/analytics.data";
+import { postData } from "../../../core/data/dashboard/post.data";
+
+
+import userApi from "../../../api/userApi";
+import { useNavStore } from "../../../core/store/nav.store";
 
 
 function Dashboard() {
     const navigate = useNavigate();
     const { showNotif } = useNotifStore();
     const { showPost } = usePostStore();
+
+    const setActiveNav = useNavStore(store => store.setActiveNav);
     const token = useAuthStore(state => state.token);
 
     const { MoonLoaderr } = loaderSpinner;
@@ -148,7 +153,6 @@ function Dashboard() {
                                 >
                                     Add Post
                                 </button>
-                                {/* <ButtonStatic label="Add Post" textColor="darkText" bgColor="darkBg" link="/dashboard" /> */}
                                 <ButtonStatic label="Read Comments" textColor="lightText" bgColor="lightBg" link="/dashboard" />
                             </div>
                         </div>
@@ -180,19 +184,32 @@ function Dashboard() {
                                             </div>
                                         </div>
                                         <div className="w-1/3 flex flex-col justify-between text-left bg-white rounded-2xl p-3">
-                                            <Title text="Reminders" />
-                                            <div className="flex flex-col">
-                                                <span className="text-3xl">dddd</span>
-                                                <span>dldlddl</span>
+                                            <div className="flex justify-between">
+                                                <Title text="Requests" />
+                                                <ReadMore text="See All" link="#" />
                                             </div>
-                                            <span>dldlddl</span>
+                                            <div className="flex justify-center gap-8">
+                                                <div className="w-10 mt-2">
+                                                    <img src={userImg}></img>
+                                                </div>
+                                                <div className="flex flex-col gap-5">
+                                                    <div className="flex flex-col">
+                                                        <span className="text-xl">Jalo Tiana</span>
+                                                        <span>1 mutual postee</span>
+                                                    </div>
+                                                    <div className="flex gap-5 capitalize text-sm">
+                                                        <span className="text-white bg-teal-light px-3 py-1 rounded-md">confirm</span>
+                                                        <span className="bg-gray-light px-3 py-1 rounded-md">decline</span>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                     <div className="flex gap-5">
                                         <div className="w-1/2 flex flex-col bg-white p-3 rounded-xl">
                                             <div className="flex justify-between">
                                                 <Title text="Most Trending Posts" />
-                                                <ButtonStatic link="/posts" bgColor="lightBg" label="View All" textColor="lightText" />
+                                                <ReadMore text="View All" link="/posts" callback={() => setActiveNav('posts')} />
                                             </div>
                                             <div className="flex flex-col gap-2">
                                                 {recentPostData.map((post, ind) => (

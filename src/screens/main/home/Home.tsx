@@ -1,7 +1,8 @@
-import partnersData from "../../../core/data/partners.data";
-import ButtonStatic from "../../../components/common/ButtonStatic";
-
 import mainImg from '../../../assets/images/bg/main.webp';
+
+import { ButtonStatic } from "../../../components/common/Button";
+
+import partnersData from "../../../core/data/partners.data";
 
 
 function Home() {
