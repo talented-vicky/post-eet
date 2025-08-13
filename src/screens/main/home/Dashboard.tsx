@@ -49,6 +49,7 @@ function Dashboard() {
         const fetchInitData = async () => {
             if (!token) {
                 showNotif("Unauthorized", "Not Logged in OR Session Expired", "error")
+                console.log("invalid token, login redirect");
                 navigate('/login')
                 return;
             }
@@ -62,6 +63,7 @@ function Dashboard() {
 
             } catch (error: any) {
                 showNotif(`${error?.response?.statusText}`, `${error?.response?.data?.message}`, "error");
+                console.log("API call failed, login redirect");
                 navigate("/login");
             } finally {
                 setIsLoading(false);
@@ -103,7 +105,7 @@ function Dashboard() {
     ]
 
     return (
-        <div className="flex gap-2 text-gray-main bg-white border border-gray-100 shadow-xl rounded-xl p-3">
+        <div className="w-[90vw] flex gap-2 text-gray-main bg-white border border-gray-100 shadow-xl rounded-xl p-3">
             {/* Sidebar */}
             <Sidebar />
 

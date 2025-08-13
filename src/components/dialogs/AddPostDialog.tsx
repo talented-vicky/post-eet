@@ -12,6 +12,10 @@ import { useNotifStore } from '../../core/store/notif.store';
 
 import postApi from '../../api/postApi';
 
+enum Visibility {
+    Public,
+    Private
+}
 
 const AddPostDialog: React.FC = () => {
     const { isOpen, hidePost } = usePostStore();
@@ -19,6 +23,7 @@ const AddPostDialog: React.FC = () => {
     const { control, handleSubmit, reset } = useForm();
 
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+    const [postVisibility, setPostVisibility] = useState<Visibility>(Visibility.Public);
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [imageUrl, setImageUrl] = useState('');
 
@@ -47,8 +52,8 @@ const AddPostDialog: React.FC = () => {
                 setImageUrl(res.data.url);
             }
 
-        } catch (error) {
-            console.log('error occured', error);
+        } catch (error: any) {
+            showNotif(`${error?.code}`, `${error?.message}`, 'error');
         }
     }
 
@@ -57,6 +62,7 @@ const AddPostDialog: React.FC = () => {
         const body = {
             title: formBody.title,
             content: formBody.content,
+            visibility: Visibility[postVisibility]
         }
 
         try {
@@ -86,9 +92,6 @@ const AddPostDialog: React.FC = () => {
                     <span>
                         Create New Post
                     </span>
-                    {/* <div>
-                        3 Quick steps to add your posts now
-                    </div> */}
                 </div>
                 <div className='flex flex-col gap-5 bg-gray-light p-10'>
                     <div className='w-full'>
@@ -97,19 +100,25 @@ const AddPostDialog: React.FC = () => {
                             control={control}
                             rules={{ required: "Title cannot be blank" }} />
                         <TextField
-                            label='content' name='content' placeholder='Content'
+                            label='description' name='content' placeholder='Description'
                             height=''
                             control={control}
-                            rules={{ required: "Content cannot be blank" }} />
+                            rules={{}} />
                     </div>
                     <div className='flex gap-3'>
-                        <div className='flex flex-col bg-white rounded-lg p-2 border-2 border-green-500'>
+                        <div
+                            className={`cursor-pointer flex flex-col bg-white rounded-lg p-2 border-2 ${postVisibility === Visibility.Public ? 'border-green-500' : ''}`}
+                            onClick={() => setPostVisibility(Visibility.Public)}
+                        >
                             <span>Public</span>
-                            <span className='text-xs'>Post will be visible to everyone on post eet</span>
+                            <span className='text-xs'>Visible to everyone on post eet</span>
                         </div>
-                        <div className='flex flex-col bg-white rounded-lg p-2'>
+                        <div
+                            className={`cursor-pointer flex flex-col bg-white rounded-lg p-2 border-2 ${postVisibility === Visibility.Private ? 'border-green-500' : ' '}`}
+                            onClick={() => setPostVisibility(Visibility.Private)}
+                        >
                             <span>Private</span>
-                            <span className='text-xs'>Keep post hidden from the public</span>
+                            <span className='text-xs'>Keep hidden from the public</span>
                         </div>
                     </div>
                     <div className='flex flex-col items-center p-3 border-2 border-dashed border-gray-400 rounded-lg'>
@@ -120,10 +129,13 @@ const AddPostDialog: React.FC = () => {
                             type='file' accept='image/*'
                             onChange={handleFileChange}
                         />
-                        <button
-                            onClick={handleMediaUpload}
-                        > Load image </button>
-                        {imageUrl && <img src={imageUrl} alt='img' className='w-48 h-48'></img>}
+                        {imageUrl && <>
+                            <button
+                                onClick={handleMediaUpload}
+                                className='w-full flex justify-end'
+                            > Load image </button>
+                            <img src={imageUrl} alt='img' className='w-48 h-48'></img>
+                        </>}
                     </div>
                     {/* <div className='flex flex-col text-left'>
                         <Button

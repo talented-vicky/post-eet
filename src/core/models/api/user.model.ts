@@ -1,3 +1,13 @@
+import type { CommentData, PostData } from "./post.model";
+
+export interface User {
+    id: number;
+    usename: string;
+    email: string;
+    comments: CommentData[];
+    posts: PostData[];
+}
+
 export interface UserDashboard {
     id: number;
     postCount: number;
