@@ -10,6 +10,13 @@ export interface PostData {
     email: string;
 }
 
+export interface CommentData {
+    id: number;
+    content: string;
+    username: string;
+    commentedAt: string;
+}
+
 export interface PostLikeData {
     postId: number,
     postLike: number,
