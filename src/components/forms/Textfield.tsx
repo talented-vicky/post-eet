@@ -53,7 +53,7 @@ const TextField: React.FC<TextFieldProps> = ({
                             {...field}
                             onFocus={() => setIsFocused(true)}
                             onBlur={() => setIsFocused(false)}
-                            className={`bg-backGround p-2 border rounded-3xl focus:outline-none border-grey-text-dark ${heightClass && 'h-16'}
+                            className={`bg-white p-2 border rounded-3xl focus:outline-none border-grey-text-dark ${heightClass && 'h-16'}
                                 ${fieldState.error ? 'border-red-500' : ''} 
                                 ${field.value && !fieldState.error ? 'border-t-main-complement border-r-main-one border-l-main-compborder-t-main-complement border-b-main-one' : ''}
                                 ${isFocused && 'border-t-main-complement border-r-main-one border-l-main-complement border-b-main-one'} 

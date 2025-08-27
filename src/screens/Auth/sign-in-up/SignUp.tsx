@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 
 
 import TextField from '../../../components/forms/Textfield';
+import DropdownField from '../../../components/forms/DropdownField';
 import { Button } from '../../../components/common/Button';
 
 import logoImg from '../../../assets/icons/logo/posteet.svg';
@@ -12,7 +13,10 @@ import googleImg from '../../../assets/images/auth/google.png';
 import appleImg from '../../../assets/images/auth/apple-logo.png';
 
 import authApi from '../../../api/authApi';
+
+import type { DropdownOptions } from '../../../core/models/form/dropdownfield.model';
 import { useNotifStore } from '../../../core/store/notif.store';
+import stateLgaData from '../../../core/data/common/state-lga.data';
 
 
 
@@ -21,14 +25,30 @@ function SignUp() {
     const navigate = useNavigate();
 
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
-    const { control, handleSubmit } = useForm();
+    const [lgaOptions, setLgaOptions] = useState<DropdownOptions[]>([]);
+    const { control, handleSubmit, watch, setValue } = useForm();
 
+    const StateLgaData = stateLgaData;
+
+    const stateOptions: DropdownOptions[] = Object.keys(StateLgaData).map(lga => ({
+        label: lga, value: lga
+    }))
+
+    const selectedState = watch("state");
+
+    useEffect(() => {
+        const lgas = StateLgaData[selectedState] || [];
+        setLgaOptions(lgas.map(lga => ({ label: lga, value: lga })));
+        setValue("lga", "");
+    }, [selectedState])
 
     const handleSignUp = async (formData: any) => {
         setIsSubmitting(true);
         const body = {
             email: formData.email,
             username: formData.username,
+            state: formData.state,
+            lga: formData.lga,
             password: formData.password,
         }
 
@@ -58,7 +78,7 @@ function SignUp() {
                         <span>Sign up and start posting now</span>
                     </div>
                     <div className='w-3/5 flex flex-col gap-5'>
-                        <div className='flex flex-col gap-3'>
+                        <div className='flex flex-col gap-1'>
                             <TextField
                                 name='email' label='Email' placeholder='Email'
                                 control={control}
@@ -72,6 +92,22 @@ function SignUp() {
                             <TextField
                                 name='username' label='Username' placeholder='Username'
                                 control={control} rules={{ required: "Username cannot be blank" }} />
+                            <div className='flex gap-2'>
+                                <DropdownField
+                                    name='state'
+                                    control={control}
+                                    options={stateOptions}
+                                    placeholder='Select State'
+                                    rules={{ required: "Select State" }}
+                                />
+                                <DropdownField
+                                    name='lga'
+                                    control={control}
+                                    options={lgaOptions}
+                                    placeholder='Select City'
+                                    rules={{ required: "Select CIty" }}
+                                />
+                            </div>
                             <TextField
                                 type='password' name='password' label='Password' placeholder='Password'
                                 control={control} rules={{

@@ -11,11 +11,10 @@ import { usePostStore } from '../../core/store/post.store';
 import { useNotifStore } from '../../core/store/notif.store';
 
 import postApi from '../../api/postApi';
+import { Button } from '../common/Button';
+import { Visibility } from '../../core/models/api/post.model';
+import localApi from '../../api/local/localApi';
 
-enum Visibility {
-    Public,
-    Private
-}
 
 const AddPostDialog: React.FC = () => {
     const { isOpen, hidePost } = usePostStore();
@@ -23,9 +22,13 @@ const AddPostDialog: React.FC = () => {
     const { control, handleSubmit, reset } = useForm();
 
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+    const [isGettingLocation, setIsGettingLocation] = useState<boolean>(false);
+
     const [postVisibility, setPostVisibility] = useState<Visibility>(Visibility.Public);
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
-    const [imageUrl, setImageUrl] = useState('');
+    const [latCoordinate, setLatCoordinate] = useState<number>(0);
+    const [longCoordinate, setLongCoordinate] = useState<number>(0);
+    const [imageUrl, setImageUrl] = useState<string[]>([]);
 
 
     if (!isOpen) return null;
@@ -34,6 +37,26 @@ const AddPostDialog: React.FC = () => {
         if (e.target.files && e.target.files[0]) {
             setSelectedFile(e.target.files[0]);
             console.log("media changed", e.target.files);
+        }
+    }
+
+    const handleGetLocation = async () => {
+        setIsGettingLocation(true);
+
+        if (!navigator.geolocation) {
+            showNotif("Unsupported", "Geolocation Not Supported by Browser", "error");
+            setIsGettingLocation(false);
+            return;
+        }
+
+        try {
+            const position = await localApi.getLocation();
+            setLatCoordinate(position.coords.latitude);
+            setLongCoordinate(position.coords.longitude);
+        } catch (error: any) {
+            showNotif("Location Error", `${error.message}` || `Unable to fetch location`, "error");
+        } finally {
+            setIsGettingLocation(false);
         }
     }
 
@@ -49,27 +72,43 @@ const AddPostDialog: React.FC = () => {
             const res = await postApi.uploadMedia(formData);
             if (res.data) {
                 console.log("media uploaded", res)
-                setImageUrl(res.data.url);
+                setImageUrl(currImage => [...currImage, res.data.url]);
             }
 
         } catch (error: any) {
-            showNotif(`${error?.code}`, `${error?.message}`, 'error');
+            showNotif(`${error?.code}`, `${error?.response?.statusText}`, 'error');
         }
     }
 
     const handleCreatePost = async (formBody: any) => {
         setIsSubmitting(true);
+
+        if (latCoordinate === 0 || longCoordinate === 0) {
+            showNotif('Location Not Set', "Please Add Post Location", "error");
+            setIsSubmitting(false);
+            return
+        }
+
         const body = {
             title: formBody.title,
             content: formBody.content,
-            visibility: Visibility[postVisibility]
+            visibility: postVisibility,
+            latitude: latCoordinate,
+            longitude: longCoordinate,
+            imageUrls: imageUrl,
         }
+
+        // console.log(body)
+        // setIsSubmitting(false)
+        // return;
 
         try {
             const res = await postApi.createPost(body);
             if (res.status) {
+                console.log(res.data)
                 showNotif(`${res.message}`, `Post id is: ${res.data.id}`, "success")
                 reset({ title: '', content: '' })
+                setLatCoordinate(0); setLongCoordinate(0); setImageUrl([]);
                 hidePost();
             }
 
@@ -121,6 +160,12 @@ const AddPostDialog: React.FC = () => {
                             <span className='text-xs'>Keep hidden from the public</span>
                         </div>
                     </div>
+                    {(latCoordinate !== 0 && longCoordinate !== 0) && (
+                        <div>
+                            <span>latitude is {latCoordinate}</span>
+                            <span>longitude is {longCoordinate}</span>
+                        </div>
+                    )}
                     <div className='flex flex-col items-center p-3 border-2 border-dashed border-gray-400 rounded-lg'>
                         <div className='w-full flex justify-end'>
                             <img src={uploadImg} alt='upload' className='w-4'></img>
@@ -134,20 +179,26 @@ const AddPostDialog: React.FC = () => {
                                 onClick={handleMediaUpload}
                                 className='w-full flex justify-end'
                             > Load image </button>
-                            <img src={imageUrl} alt='img' className='w-48 h-48'></img>
+                            <div className='flex overflow-auto w-full scrollbar-hide'>
+                                {imageUrl.map((image, ind) => (
+                                    <img key={ind} src={image} alt='img' className='w-40 h-40'></img>
+                                ))}
+                            </div>
                         </>}
                     </div>
-                    {/* <div className='flex flex-col text-left'>
+                    <div className='flex flex-col text-left'>
                         <Button
-                            type='button' label='Create Post'
-                            disabled={false} loading={isSubmitting} loadingLabel='Creating Post'
-                            onclick={handleSubmit(handleCreatePost)}
+                            type='button' label='Use my location' loadingLabel='Fetching Location'
+                            disabled={isGettingLocation} loading={isGettingLocation}
+                            onclick={handleGetLocation}
                         />
-                    </div> */}
-                    <div
-                        onClick={handleSubmit(handleCreatePost)}
-                        className='w-fit bg-teal-gradient flex cursor-pointer text-white border shadow-sm shadow-slate-50 rounded-2xl px-4 py-2'
-                    > Create Post </div>
+                    </div>
+                    <Button
+                        type='button' label='Create Post' loadingLabel='Creating Post'
+                        disabled={isGettingLocation} loading={isSubmitting}
+                        onclick={handleSubmit(handleCreatePost)}
+                        classname='w-fit bg-teal-gradient flex cursor-pointer text-white border shadow-sm shadow-slate-50 rounded-2xl px-4 py-2'
+                    />
                 </div>
                 <div className='absolute left-2 bottom-2'>
                     <div
