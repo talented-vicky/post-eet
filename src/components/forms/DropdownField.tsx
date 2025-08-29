@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Controller } from "react-hook-form";
 
-import errLogo from '../../assets/images/logo/Error Icon.png';
+import errLogo from '../../assets/images/error.png';
 import type DropdownProps from '../../core/models/form/dropdownfield.model';
 
 import arrowDown from '../../assets/icons/arrows/arrow-down.svg';
@@ -48,7 +48,7 @@ const DropdownField: React.FC<DropdownProps> = ({
 
     return (
         <div
-            className='relative mb-4 py-2 w-full'
+            className='relative mb-2 py-2 w-full'
             ref={dropdownRef}
         >
             <Controller
@@ -73,7 +73,7 @@ const DropdownField: React.FC<DropdownProps> = ({
                             tabIndex={0}
                             onFocus={() => setIsFocused(true)}
                             onBlur={() => setIsFocused(false)}
-                            className={`bg-backGround ${(isFocused || field.value) ? 'text-gray-700' : 'text-grey-text-dark'} p-2 border rounded-xl focus:outline-none border-grey-text-dark
+                            className={`bg-white ${(isFocused || field.value) ? 'text-gray-700' : 'text-grey-text-dark'} text-left p-2 border rounded-xl focus:outline-none border-grey-text-dark
                                 ${fieldState.error ? 'border-red-500' : ''} 
                                 ${field.value && !fieldState.error ? 'border-t-secondary border-r-primary border-l-secondary border-b-primary' : ''}
                                 ${isFocused && 'border-t-secondary border-r-primary border-l-secondary border-b-primary'} 
@@ -88,11 +88,11 @@ const DropdownField: React.FC<DropdownProps> = ({
                                 }}
                             >
                                 <span> {options.find(option => option[valueKey] === field.value)?.[labelKey] || placeholder} </span>
-                                <img alt='arrow' src={arrowDown}></img>
+                                <img alt='arrow' src={arrowDown} className='w-3'></img>
                             </button>
                             {
                                 isOpen && (
-                                    <ul className='absolute z-10 left-0 right-0 bg-backGround border border-gray-200 mt-2 rounded-lg shadow-lg max-h-48 overflow-auto'>
+                                    <ul className='absolute z-10 left-0 right-0 bg-white border border-gray-200 mt-2 rounded-lg shadow-lg max-h-32 overflow-auto'>
                                         {options.map(option => (
                                             <li
                                                 key={option[valueKey]}

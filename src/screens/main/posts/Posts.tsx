@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 
 import Title from "../../../components/common/Title";
 import Sidebar from "../../../components/navigation/Sidebar";
-import loaderSpinner from "../../../components/common/Loader";
 import CommentDialog from "../../../components/dialogs/CommentDialog";
 
 import tempImg from '../../../assets/images/bg/post-eet.webp';
@@ -11,36 +10,45 @@ import heartLikedImg from '../../../assets/icons/post/heart-liked.svg';
 import showImg from '../../../assets/icons/post/show.svg';
 import chatImg from '../../../assets/icons/post/chat.svg';
 
-import type { PostData } from "../../../core/models/api/post.model";
+import type { NearbyPostsQuery, PostData } from "../../../core/models/api/post.model";
 
 import { useNotifStore } from "../../../core/store/notif.store";
 import { useCommentStore } from "../../../core/store/comment.store";
 
 import postApi from "../../../api/postApi";
+import type { BaseQuery } from "../../../core/models/api/query.model";
+import { TextButton } from "../../../components/common/TextButton";
 
 
 function Posts() {
-    const { MoonLoaderr } = loaderSpinner;
     const { showNotif } = useNotifStore();
     const { showPost } = useCommentStore();
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
+    const [queryParams, setQueryParams] = useState<BaseQuery>({ page: 1, pageSize: 3 });
+    const [locationParams, setLocationParams] = useState<NearbyPostsQuery>({ page: 1, pageSize: 3, latitude: 1.327, longitude: 4.567 });
     const [selectedPostId, setSelectedPostId] = useState<number>(0);
     const [postData, setPostData] = useState<PostData[]>([]);
 
 
     useEffect(() => {
-        const apiCalls = [fetchPosts()];
+        const apiCalls = [fetchPosts(queryParams)];
         Promise.all(apiCalls);
     }, [])
 
+
+    const handleLoadPosts = async () => {
+        const newParams = { page: queryParams.page + 1, pageSize: 3 }
+        setQueryParams(newParams);
+        fetchPosts(newParams, true)
+    }
 
     const handlePostLike = async (postId: number) => {
         try {
             const res = await postApi.likePost(postId);
             if (res.status) {
-                fetchPosts();
+                fetchPosts(queryParams);
                 showNotif("Success", `${res.message}`, "notif");
             }
         } catch (error: any) {
@@ -48,11 +56,13 @@ function Posts() {
         }
     }
 
-    const fetchPosts = async () => {
+    const fetchPosts = async (params: BaseQuery, appending = false) => {
         setIsLoading(true);
         try {
-            const res = await postApi.fetchPosts();
-            if (res.data) { setPostData(res.data); }
+            const res = await postApi.fetchPosts(params);
+            if (res.data) {
+                setPostData(prevPosts => appending ? [...prevPosts, ...res.data] : res.data)
+            }
         } catch (error) {
             showNotif("Error", "Error Loading Posts", "error");
         } finally {
@@ -60,20 +70,31 @@ function Posts() {
         }
     }
 
+    const fetchNearbyPosts = async (params: NearbyPostsQuery) => {
+        setIsLoading(true);
+        try {
+            params.latitude = 3.223; params.longitude = 5.331;
+            const res = await postApi.fetchNearbyPosts(params);
+            if (res.data) {
+                console.log(res.data);
+            }
+        } catch (error) {
+            showNotif("Error", "Error Fetching Nearby Posts", "error");
+        } finally {
+            setIsLoading(false);
+        }
+    }
+
     return (
         <div className="flex gap-2 text-gray-main bg-white border border-gray-100 shadow-xl rounded-xl p-3">
             <Sidebar />
             <CommentDialog postId={selectedPostId} />
-            {isLoading ? (
-                <div className="w-4/5 flex justify-center items-center">
-                    <MoonLoaderr />
-                </div>
-            ) : (
-                <div className="w-4/5 flex flex-col">
-                    <Title text="All Posts" />
-                    <div className="flex p-3 bg-gray-light rounded-xl h-full">
-                        <div className="w-1/2 h-[85vh] overflow-auto">
-                            {postData.map((post, ind) => (
+            <div className="w-4/5 flex flex-col">
+                <Title text="All Posts" />
+                <div className="flex p-3 bg-gray-light rounded-xl h-full">
+                    <div className="w-1/2 h-[85vh] overflow-auto">
+                        {
+                            postData.map((post, ind) => (
                                 <div
                                     key={ind}
                                     className="flex flex-col bg-white rounded-lg mb-3 p-3"
@@ -83,7 +104,15 @@ function Posts() {
                                         <img src={heartImg} alt="view" onClick={() => handlePostLike(post.id)} className="w-4 cursor-pointer"></img>
                                     </div>
                                     <div className="flex flex-col items-center">
-                                        <img src={tempImg} alt="img" className="w-56 rounded-lg"></img>
+                                        {post.imageUrls.length === 0 ? (
+                                            <img src={tempImg} alt="img" className="w-56 rounded-lg"></img>
+                                        ) : (
+                                            <div className="flex overflow-auto scrollbar-hide">
+                                                {post.imageUrls.map((image, ind) => (
+                                                    <img key={ind} src={image.url} alt="img" className="w-64 rounded-lg"></img>
+                                                ))}
+                                            </div>
+                                        )}
                                         <span>{post.title}</span>
                                         <span>{post.content}</span>
                                         <span>{post.email}</span>
@@ -109,16 +138,20 @@ function Posts() {
                                         </div>
                                     </div>
                                 </div>
-                            ))}
-                        </div>
-                        <div className="w-1/2">
-                            <div>Trending Posts</div>
-                            <div>Recent Posts</div>
-                        </div>
+                            ))
+                        }
+                        <TextButton
+                            label="load more"
+                            disabled={isLoading} loading={isLoading}
+                            onclick={handleLoadPosts}
+                        />
+                    </div>
+                    <div className="w-1/2">
+                        <div>Trending Posts</div>
+                        <div>Nearby Posts</div>
                     </div>
                 </div>
-            )}
-
+            </div>
         </div>
     )
 }

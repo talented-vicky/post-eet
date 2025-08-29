@@ -1,5 +1,9 @@
 import type { Control, FieldError } from "react-hook-form";
 
+export interface DropdownOptions {
+    label: string;
+}
+
 export default interface DropdownFieldProps {
     name: string;
     placeholder: string;

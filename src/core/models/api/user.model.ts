@@ -14,6 +14,8 @@ export interface UserDashboard {
     totalComments: number;
     username: string;
     email: string;
+    state: string;
+    lga: string;
     anylytics: AnalyticsData;
     recentPosts: RecentPostsData
 }

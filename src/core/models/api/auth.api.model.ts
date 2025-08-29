@@ -6,5 +6,7 @@ export interface LoginParams {
 export interface signUpParams {
     username: string;
     email: string;
+    state: string;
+    lga: string;
     password: string;
 }

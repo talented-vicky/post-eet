@@ -1,3 +1,12 @@
+import type { BaseQuery } from "./query.model";
+
+// ENUMS
+export enum Visibility {
+    Public = "Public",
+    Private = "Private"
+}
+
+// DATA
 export interface PostData {
     id: number;
     title: string;
@@ -8,6 +17,14 @@ export interface PostData {
     userId: number;
     username: string;
     email: string;
+    imageUrls: PostImageData[];
+}
+
+interface PostImageData {
+    id: number;
+    url: string;
+    postId: number;
+    post: null;
 }
 
 export interface CommentData {
@@ -25,6 +42,10 @@ export interface PostLikeData {
 export interface PostCreateData {
     title: string;
     content: string;
+    visibility: Visibility,
+    latitude: number;
+    longitude: number;
+    imageUrls: string[];
 }
 
 export interface PostCommentData {
@@ -34,11 +55,6 @@ export interface PostCommentData {
     commentedAt: string;
 }
 
-export interface PostCommentProps {
-    postId: number;
-    content: string;
-}
-
 export interface PostCommentResponseData {
     id: number;
 }
@@ -46,4 +62,16 @@ export interface PostCommentResponseData {
 export interface MediaUploadData {
     url: string;
     id: string;   
+}
+
+// PROPS
+export interface PostCommentProps {
+    postId: number;
+    content: string;
+}
+
+export interface NearbyPostsQuery extends BaseQuery {
+    latitude: number;
+    longitude: number;
+    radius?: number;
 }
