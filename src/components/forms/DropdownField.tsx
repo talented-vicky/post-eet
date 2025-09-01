@@ -81,6 +81,7 @@ const DropdownField: React.FC<DropdownProps> = ({
                         >
                             <button
                                 type='button'
+                                aria-label={placeholder}
                                 className='w-full flex justify-between items-center'
                                 onClick={() => {
                                     toggleDropdown();
