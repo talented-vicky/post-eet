@@ -16,13 +16,15 @@ import { useCommentStore } from '../../core/store/comment.store';
 
 import postApi from '../../api/postApi';
 import loaderSpinner from '../common/Loader';
+import { useNavigate } from 'react-router-dom';
 
 
 const CommentDialog: React.FC<{ postId: number }> = ({ postId }) => {
-    const { DotLoaderr, BounceLoaderr } = loaderSpinner;
-
-    const { isOpen, hidePost } = useCommentStore();
+    const navigate = useNavigate();
     const showNotif = useNotifStore(state => state.showNotif);
+
+    const { DotLoaderr, BounceLoaderr } = loaderSpinner;
+    const { isOpen, hidePost } = useCommentStore();
     const { control, handleSubmit, reset } = useForm();
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -52,6 +54,7 @@ const CommentDialog: React.FC<{ postId: number }> = ({ postId }) => {
             }
         } catch (error: any) {
             showNotif(`${error?.response?.statusText}`, "Unable to load comments", "error");
+            navigate('/login');
         } finally {
             setIsLoading(false);
         }
@@ -73,6 +76,7 @@ const CommentDialog: React.FC<{ postId: number }> = ({ postId }) => {
             }
         } catch (error: any) {
             showNotif(`${error?.response?.statusText}`, `${error?.response?.data?.message}`, `error`);
+
         } finally {
             setIsSubmitting(false);
         }

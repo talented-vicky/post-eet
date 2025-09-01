@@ -18,9 +18,11 @@ import { useCommentStore } from "../../../core/store/comment.store";
 import postApi from "../../../api/postApi";
 import type { BaseQuery } from "../../../core/models/api/query.model";
 import { TextButton } from "../../../components/common/TextButton";
+import { useNavigate } from "react-router-dom";
 
 
 function Posts() {
+    const navigate = useNavigate();
     const { showNotif } = useNotifStore();
     const { showPost } = useCommentStore();
 
@@ -53,6 +55,7 @@ function Posts() {
             }
         } catch (error: any) {
             showNotif(`${error?.response?.statusText}`, `${error?.response?.data?.message}`, "error");
+            navigate('/login');
         }
     }
 
@@ -86,7 +89,7 @@ function Posts() {
     }
 
     return (
-        <div className="flex gap-2 text-gray-main bg-white border border-gray-100 shadow-xl rounded-xl p-3">
+        <div className="flex w-[95vw] gap-2 text-gray-main bg-white border border-gray-100 shadow-xl rounded-xl p-3">
             <Sidebar />
             <CommentDialog postId={selectedPostId} />
             <div className="w-4/5 flex flex-col">

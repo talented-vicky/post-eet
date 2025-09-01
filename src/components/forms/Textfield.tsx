@@ -51,6 +51,7 @@ const TextField: React.FC<TextFieldProps> = ({
                         <input
                             type={inputType}
                             {...field}
+                            placeholder={placeholder}
                             onFocus={() => setIsFocused(true)}
                             onBlur={() => setIsFocused(false)}
                             className={`bg-white p-2 border rounded-3xl focus:outline-none border-grey-text-dark ${heightClass && 'h-16'}

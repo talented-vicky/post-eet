@@ -15,7 +15,7 @@ import ConfirmationDialog from './components/dialogs/ConfirmationDialog';
 
 function App() {
   return (
-    <Router>
+    <>
       <ConfirmationDialog />
       <AddPostDialog />
       <NotifDialog />
@@ -29,7 +29,7 @@ function App() {
         <Route path='/dashboard' element={<Dashboard />} />
         <Route path='/posts' element={<Posts />} />
       </Routes>
-    </Router>
+    </>
   )
 }
 
