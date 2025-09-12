@@ -104,7 +104,7 @@ function Posts() {
                                 >
                                     <div className="flex gap-2 justify-end items-center">
                                         <span>Like</span>
-                                        <img src={heartImg} alt="view" onClick={() => handlePostLike(post.id)} className="w-4 cursor-pointer"></img>
+                                        <img src={heartImg} alt="like" onClick={() => handlePostLike(post.id)} className="w-4 cursor-pointer"></img>
                                     </div>
                                     <div className="flex flex-col items-center">
                                         {post.imageUrls.length === 0 ? (

@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react"
 import { MemoryRouter } from "react-router-dom";
 import SignUp from "../../src/screens/Auth/sign-in-up/SignUp";
 
-describe("Signup screen", () => {
+describe("Signup unit test", () => {
     it("renders email, username and password textfields", () => {
         // mounting login component in mock router
         render(<MemoryRouter><SignUp /></MemoryRouter>);
