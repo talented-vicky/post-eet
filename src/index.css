@@ -20,7 +20,7 @@
 
 body {
   margin: 0;
-  place-items: center;
+  /* place-items: center; */
 }
 
 @media (prefers-color-scheme: light) {

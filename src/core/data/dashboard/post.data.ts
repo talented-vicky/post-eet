@@ -1,4 +1,4 @@
-export const postData = [
+export const dummyPostData = [
     {
         title: 'Almand Serrif',
         email: 'almandserrif@gmail.com',
