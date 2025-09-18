@@ -9,7 +9,7 @@ export const TextButton: React.FC<TextButtonProps> = ({ label, disabled, loading
             disabled={disabled}
             type='button'
             onClick={onclick}
-            aria-label={label}
+            aria-label={label} // for accessibility (test case)
             className={`w-full text-sm`}
         >
             <span className="flex justify-center xs:text-base sm:text-base md:text-lg lg:text-lg xl:text-lg">
