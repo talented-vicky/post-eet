@@ -1,16 +1,17 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import menuImg from '../../../assets/icons/nav/menu.svg';
+import notifImg from '../../../assets/icons/util/notification.svg';
 import demi from '../../../assets/images/status/demi.webp';
-import moreImg from '../../../assets/icons/arrows/up-right-arrow.svg';
+
 import addpostImg from '../../../assets/icons/post/add-post.svg';
+import moreImg from '../../../assets/icons/arrows/up-right-arrow.svg';
+
 import reportImg from '../../../assets/icons/nav/report.svg';
-import settingsImg from '../../../assets/icons/nav/setting.svg';
 import searchImg from '../../../assets/icons/util/search.svg';
 import emailImg from '../../../assets/icons/nav/email.svg';
-import notifImg from '../../../assets/icons/util/notification.svg';
 import userImg from '../../../assets/icons/util/user.svg';
-import hamburgerImg from '../../../assets/icons/nav/hamburger.svg';
 
 import viewsImg from '../../../assets/icons/post/show.svg';
 import likesImg from '../../../assets/icons/post/heart.svg';
@@ -68,6 +69,7 @@ function Dashboard() {
 
     useEffect(() => {
         const fetchInitData = async () => {
+            // this should handle token expiration or invalidation
             if (!token) {
                 showNotif("Unauthorized", "Not Logged in OR Session Expired", "error")
                 console.log("invalid token, login redirect");
@@ -81,12 +83,11 @@ function Dashboard() {
                 const [dashboardResponse, postResponse] = await Promise.all([
                     userApi.getUserDashboard(), postApi.fetchPosts(body)
                 ])
-                if (dashboardResponse.status) setUserDashboard(dashboardResponse.data);
+                if (dashboardResponse.status) { setUserDashboard(dashboardResponse.data); console.log(dashboardResponse.data) };
                 if (postResponse.data) setPostData(postResponse.data);
 
             } catch (error: any) {
-                showNotif(`${error?.response?.statusText}`, `${error?.response?.data?.message}`, "error");
-                console.log("API call failed, do sth");
+                showNotif(`${error?.response?.statusText || 'Error'}`, `${error?.response?.data?.message || 'Network Error'}`, "error");
             } finally {
                 setIsLoading(false);
             }
@@ -132,11 +133,8 @@ function Dashboard() {
                 <div>
                     <MobileNav />
                     <div className="flex flex-col gap-5">
-                        <div className="flex justify-between bg-gray-light rounded-3xl p-2">
-                            <button onClick={toggleMenu}>
-                                <img src={hamburgerImg} alt="menu" className="w-5"></img>
-
-                            </button>
+                        <div className="flex justify-between items-center bg-gray-light rounded-3xl p-2">
+                            <img src={menuImg} onClick={toggleMenu} alt="menu" className="h-7"></img>
                             <div className="flex gap-3">
                                 <img src={notifImg} alt="notif" className="w-5"></img>
                                 <img src={demi} alt="profile" className="w-8 h-8 rounded-full"></img>
